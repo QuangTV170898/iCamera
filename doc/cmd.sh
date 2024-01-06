@@ -33,10 +33,14 @@ p2p0      IEEE 802.11bgn  Mode:Master
 ## station mode 
 killall -9 wpa_supplicant
 killall -9 udhcpc
+
+echo ctrl_interface=/var/run/wpa_supplicant > /tmp/wpa_supplicant.conf # start station mode
+echo update_config=1 >> /tmp/wpa_supplicant.conf # user should be save config
+
 wpa_supplicant -c /configs/wpa_supplicant.conf -i wlan0 &
 udhcpc -i wlan0 &
 
 ## access point mode
-ifconfig p2p0 192.168.39.1
+ifconfig p2p0 192.168.39.1 up
 hostapd /configs/hostapd.conf -B
 udhcpd -f /configs/udhcpd.conf &

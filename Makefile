@@ -22,6 +22,8 @@ CFLAGS += $(OPTIMIZE) -lpthread -lm -lrt -ldl
 CFLAGS += -I$(PROJECT_DIR)/sources
 CFLAGS += -I$(PROJECT_DIR)/sources/app
 CFLAGS += -I$(PROJECT_DIR)/sources/utils
+CFLAGS += -I$(PROJECT_DIR)/sources/app/net
+
 
 # dependencies
 CFLAGS += -I
@@ -32,6 +34,7 @@ LIBS +=
 CSRCS += $(wildcard sources/*.c)
 CSRCS += $(wildcard sources/app/*.c)
 CSRCS += $(wildcard sources/utils/*.c)
+CSRCS += $(wildcard sources/app/net/*.c)
 OBJS  += $(patsubst %.c, $(OBJ_DIR)/%.o, $(CSRCS))
 
 CFLAGS += -g -lpthread -lrt -ldl
