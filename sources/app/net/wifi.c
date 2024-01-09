@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <errno.h>
+#include <json-c/json.h>
 
 #include "app.h"
 #include "bd_log.h"
@@ -19,73 +20,10 @@
 #define BD_NET_WIFI_STA_SAVE_CONFIG_CMD "wpa_cli -i %s save_config"
 #define BD_NET_WIFI_STA_STATUS_CMD "wpa_cli -i %s status"
 
-static int _net_wifi_sta_init();
-static int _net_wifi_ap_init();
-
 static int _net_wifi_scan_start();
 static int _net_wifi_scan_result();
 
-int bd_net_wifi_get_config()
-{
-    int ret = BD_RET_OK;
-    return ret;
-}
-
-int bd_net_wifi_get_connect_info(const char *interface, bd_net_wifi_ip_t *info)
-{
-    int ret = BD_RET_OK;
-    char cmd[128];
-    char buf[32];
-    sprintf((char *)cmd, BD_NET_WIFI_STA_STATUS_CMD, interface);
-    FILE *f = popen((const char *)cmd, "r");
-    if (f == NULL)
-    {
-        BD_LOG_ERROR("popen fail: %s", strerror(errno));
-        return BD_RET_FAIL;
-    }
-
-    memset(buf, 0, sizeof(buf));
-    memset(info, 0, sizeof(bd_net_wifi_ip_t));
-    while (fgets(buf, sizeof(buf), f) != NULL)
-    {
-        sscanf((const char *)buf, "ip_address=%s", info->host_ip);
-        sscanf((const char *)buf, "address=%s", info->mac);
-    }
-
-    pclose(f);
-    return ret;
-}
-
-int bd_net_wifi_init(void)
-{
-    int ret = BD_RET_OK;
-    ret = _net_wifi_ap_init();
-    ret = _net_wifi_sta_init();
-    return ret;
-}
-
-int bd_net_wifi_sta_scan_host_ap()
-{
-    int ret = BD_RET_OK;
-    ret = _net_wifi_scan_start();
-    ret = _net_wifi_scan_result();
-    return ret;
-}
-
-int bd_net_wifi_sta_config_network()
-{
-    int ret = BD_RET_OK;
-    return ret;
-}
-
-int bd_net_wifi_ap_config_network();
-
-void bd_net_wifi_release()
-{
-    BD_LOG_INFO("WIFI module release");
-}
-
-static int _net_wifi_sta_init()
+int bd_net_wifi_sta_init()
 {
     int ret = BD_RET_OK;
     BD_LOG_INFO("WIFI sta init");
@@ -113,8 +51,34 @@ static int _net_wifi_sta_init()
 
     return ret;
 }
+int bd_net_wifi_sta_get_config(bd_net_wifi_sta_config_t *config)
+{
+    int ret = BD_RET_OK;
+    return ret;
+}
+int bd_net_wifi_sta_set_config(bd_net_wifi_sta_config_t *config)
+{
+    int ret = BD_RET_OK;
+    return ret;
+}
+int bd_net_wifi_sta_connect()
+{
+    int ret = BD_RET_OK;
+    return ret;
+}
+int bd_net_wifi_sta_disconnect()
+{
+    int ret = BD_RET_OK;
+    return ret;
+}
 
-static int _net_wifi_ap_init()
+
+int bd_net_wifi_ap_set_config(bd_net_wifi_ap_config_t *config)
+{
+    int ret = BD_RET_OK;
+    return ret;
+}
+int bd_net_wifi_ap_start()
 {
     int ret = BD_RET_OK;
     BD_LOG_INFO("WIFI ap init");
@@ -143,12 +107,51 @@ static int _net_wifi_ap_init()
     return ret;
 }
 
+int bd_net_wifi_get_connect_info(const char *interface, bd_net_wifi_ip_t *info)
+{
+    int ret = BD_RET_OK;
+    char cmd[128];
+    char buf[32];
+    sprintf((char *)cmd, BD_NET_WIFI_STA_STATUS_CMD, interface);
+    FILE *f = popen((const char *)cmd, "r");
+    if (f == NULL)
+    {
+        BD_LOG_ERROR("popen fail: %s", strerror(errno));
+        return BD_RET_FAIL;
+    }
+
+    memset(buf, 0, sizeof(buf));
+    memset(info, 0, sizeof(bd_net_wifi_ip_t));
+    while (fgets(buf, sizeof(buf), f) != NULL)
+    {
+        sscanf((const char *)buf, "ip_address=%s", info->host_ip);
+        sscanf((const char *)buf, "address=%s", info->mac);
+    }
+
+    pclose(f);
+    return ret;
+}
+
+int bd_net_wifi_sta_scan_host_ap()
+{
+    int ret = BD_RET_OK;
+    ret = _net_wifi_scan_start();
+    ret = _net_wifi_scan_result();
+    return ret;
+}
+
+void bd_net_wifi_release()
+{
+    BD_LOG_INFO("WIFI module release");
+}
+
 static int _net_wifi_scan_start()
 {
     int ret = BD_RET_OK;
     BD_LOG_INFO("WIFI sta scan start");
     return ret;
 }
+
 static int _net_wifi_scan_result()
 {
     int ret = BD_RET_OK;
