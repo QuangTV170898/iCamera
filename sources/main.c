@@ -5,9 +5,10 @@
 
 #include "app.h"
 #include "bd_log.h"
+#include "bd_sys.h"
 
 static bool isFlag = true;
-
+#define test    "~/workspace/"
 void exit_handler()
 {
     isFlag = false;
@@ -26,7 +27,10 @@ int main()
     ret = bd_app_init();
     if (ret != BD_RET_OK)
         exit(-1);
-        
+    ret = bd_sys_cmd("ls -la %s", test);
+    if (ret != BD_RET_OK)
+        exit(-1);
+
     while (isFlag)
     {
         usleep(1000);

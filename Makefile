@@ -26,8 +26,9 @@ CFLAGS += -I$(PROJECT_DIR)/sources/app/net
 
 
 # dependencies
-CFLAGS += -I
-CFLAGS += -L
+LIB_PATH=$(PROJECT_DIR)/library
+CFLAGS += -I$(LIB_PATH)/inc
+CFLAGS += -L$(LIB_PATH)/lib
 LIBS +=
 
 # add path sources c
