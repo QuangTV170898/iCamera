@@ -32,6 +32,7 @@ LIBS +=
 CSRCS += $(wildcard sources/*.c)
 CSRCS += $(wildcard sources/app/*.c)
 CSRCS += $(wildcard sources/utils/*.c)
+CSRCS += $(wildcard sources/app/video/*.c)
 OBJS  += $(patsubst %.c, $(OBJ_DIR)/%.o, $(CSRCS))
 
 CFLAGS += -g -lpthread -lrt -ldl
