@@ -21,6 +21,7 @@ CFLAGS += $(OPTIMIZE) -lpthread -lm -lrt -ldl
 # sources include  
 CFLAGS += -I$(PROJECT_DIR)/sources
 CFLAGS += -I$(PROJECT_DIR)/sources/app
+CFLAGS += -I$(PROJECT_DIR)/sources/app/video
 CFLAGS += -I$(PROJECT_DIR)/sources/utils
 
 # dependencies

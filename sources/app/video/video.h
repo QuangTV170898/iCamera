@@ -3,6 +3,20 @@
 
 #include <stdint.h>
 
+#define SENSOR_NAME "gc2053"
+#define SENSOR_CUBS_TYPE TX_SENSOR_CONTROL_INTERFACE_I2C
+#define SENSOR_I2C_ADDR 0x37
+#define SENSOR_WIDTH 1920
+#define SENSOR_HEIGHT 1080
+#define CHN0_EN 1
+#define CHN1_EN 0
+#define CHN2_EN 0
+#define CHN3_EN 1
+#define CROP_EN 1
+
+#define BD_VIDEO_ENCODE_CHANNEL_NUM_MAX 2
+typedef void (*bd_video_recv_callback)(uint8_t channel, char *data, uint32_t len, uint64_t pts, uint8_t frame_type);
+
 typedef enum
 {
 	BD_VIDEO_CODEC_H264 = 0,
@@ -28,15 +42,35 @@ typedef enum BD_VIDEO_FRAME_ID
 
 typedef struct video
 {
-	uint8_t res;
+	uint32_t width;
+	uint32_t height;
 	uint8_t fps;
 	uint8_t codec;
+	uint32_t gop;
+	uint8_t bitrate_mode;
+	uint32_t bitrate_num;
 } bd_video_config_t;
 
-typedef void (*bd_video_recv_callback)(char *data, uint32_t len, uint64_t pts, uint8_t frame_type);
-int bd_video_set_callback(uint8_t channel, bd_video_recv_callback callback);
+typedef struct
+{
+	uint8_t state;
+	uint8_t enable;
+	uint8_t channel;
 
+	pthread_t pid;
+	pthread_mutex_t mutex;
+
+	bd_video_recv_callback callback;
+} bd_venc_context_t;
+
+extern int IMP_OSD_SetPoolSize(int size);
+
+int bd_isp_init();
+int bd_video_init(int channel);
 int bd_video_set_config(int channel, bd_video_config_t *config);
 int bd_video_get_config(int channel, bd_video_config_t *config);
+
+int bd_video_start(int channel);
+int bd_video_stop(int channel);
 
 #endif /* __BD_VIDEO_H__ */
