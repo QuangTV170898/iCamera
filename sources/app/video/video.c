@@ -15,6 +15,7 @@
 #include "app.h"
 #include "bd_log.h"
 #include "video.h"
+#include "webrtc.h"
 
 bd_venc_context_t context[BD_VIDEO_ENCODE_CHANNEL_NUM_MAX];
 
@@ -220,7 +221,8 @@ int bd_video_stop(int channel)
 {
     int ret = 0;
     pthread_mutex_lock(&context[channel].mutex);
-    context[channel].enable = false;
+    if (context[channel].enable)
+        context[channel].enable = false;
     BD_LOG_INFO("VENC stop channel %d", context[channel].channel);
     pthread_mutex_unlock(&context[channel].mutex);
     pthread_join(context[channel].pid, NULL);

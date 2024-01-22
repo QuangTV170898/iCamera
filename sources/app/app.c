@@ -3,11 +3,13 @@
 #include "bd_log.h"
 #include "video.h"
 
+#include "webrtc.h"
+#include "bd_venc.h"
 int bd_app_init(void)
 {
     int ret = BD_RET_OK;
     BD_LOG_INFO("APP init");
-
+#if 0
     bd_isp_init();
 
     bd_video_init(BD_VIDEO_MAIN_CHANNEL);
@@ -35,6 +37,11 @@ int bd_app_init(void)
 
     bd_video_start(BD_VIDEO_MAIN_CHANNEL);
     bd_video_start(BD_VIDEO_SUB_CHANNEL);
+#endif
+    bd_initWebRTCKVS();
+    bd_startWebRTCKVS();
+    bd_venc_init();
+    bd_venc_start();
 
     return ret;
 }
